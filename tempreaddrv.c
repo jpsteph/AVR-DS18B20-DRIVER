@@ -14,7 +14,7 @@
 #include "clock.h"
 #include <util/delay.h>
 
-void getTemp(void)
+void getTemp(uint8_t output)
 {
 	int temp;
 	float tempf;
@@ -27,6 +27,8 @@ void getTemp(void)
 	//turning to float and dividing by 16 to get temp in C
 	tempf = ((float) temp) / 16;
 	
-	USART_Transmit_Float(tempf);
-	
+	if(output)
+	{
+		USART_Transmit_Float(tempf);
+	}
 }

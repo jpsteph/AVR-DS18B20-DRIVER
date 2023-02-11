@@ -9,9 +9,7 @@
 #ifndef TEMPREADDRV_H_
 #define TEMPREADDRV_H_
 
-void getTemp(void);
-
-
+void getTemp(uint8_t output);
 
 
 #endif /* TEMPREADDRV_H_ */

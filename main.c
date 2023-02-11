@@ -19,30 +19,41 @@
 
 #define VCC 6 //PB6
 #define GND 6 //PE6
-#define LED 7 //PC7
 
 #define INITSENS()  DDRB |= (1 << VCC);\
 					PORTB |= (1 << VCC);\
 					DDRE |= (1 << GND);\
-					PORTE &= ~(1 << GND);\
-					DDRC |= (1 << LED);\
-					PORTC &= ~(1 << LED);
+					PORTE &= ~(1 << GND);
 
+#define LED 7 //PC7
+#define LEDINIT() DDRC |= (1 << LED);\
+				  PORTC &= ~(1 << LED);
 #define BLINKLED() PORTC |= (1 << LED);\
 					_delay_ms(50);\
 					PORTC &= ~(1 << LED);\
 					_delay_ms(50);
+ 
 
 
 int main(void)
 {
 	
 	INITSENS();
+	LEDINIT();
 	USART_Init( BAUDRATE );
 	
 	char rxbuffer[BUFSIZE];
 	int filledbuffsize;
 	uint8_t flag;
+	
+	//startup indicator
+	for(uint8_t i=0; i < 20; i++) 
+	{
+		BLINKLED();
+	}
+	//dumping the first two temp measurements
+	getTemp(0);
+	getTemp(0);
 	
 	//USART cmds
 	char tempcmd[]= "tmpi";
@@ -61,7 +72,7 @@ int main(void)
 		{
 			BLINKLED();
 			
-			getTemp();
+			getTemp(1);
 			flag = 0;
 		}
 		
@@ -69,7 +80,7 @@ int main(void)
 		
 		if(flag)
 		{
-			for(uint8_t i=0; i < 20; i++)
+			for(uint8_t i=0; i < 20; i++) 
 			{
 				BLINKLED();
 			}
